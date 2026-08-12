@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Espirales del Silencio</title>
+  <style>
+    /* Tipografía de la espiral — local, funciona sin internet */
+    @font-face {
+      font-family: 'EB Garamond';
+      font-style: normal;
+      font-weight: 500;
+      src: url('libs/fuentes/EBGaramond.ttf') format('truetype');
+    }
+    @font-face {
+      font-family: 'EB Garamond';
+      font-style: italic;
+      font-weight: 500;
+      src: url('libs/fuentes/EBGaramond-Italic.ttf') format('truetype');
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; overflow: hidden; background: #070707; }
+    body { font-family: 'Courier New', monospace; color: rgba(255,255,255,0.7); }
+    #app { width: 100%; height: 100%; }
+    canvas { display: block; }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+
+  <!-- p5 local: no requiere internet ni instalación -->
+  <script src="libs/p5.min.js"></script>
+
+  <!-- Módulos en orden de dependencia (scripts clásicos, sin import/export) -->
+  <script src="js/antonimos.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/espirales.js"></script>
+  <script src="js/estados.js"></script>
+  <script src="js/audioEfectos.js"></script>
+  <script src="js/audioAnalizador.js"></script>
+  <script src="js/reconocimiento.js"></script>
+  <script src="js/whisper.js"></script>
+  <script src="js/dibujante.js"></script>
+  <script src="js/ola.js"></script>
+  <script src="js/particulas.js"></script>
+  <script src="js/overlays.js"></script>
+  <script src="js/teclado.js"></script>
+  <script src="js/panelDebug.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
