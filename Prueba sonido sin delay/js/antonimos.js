@@ -309,6 +309,8 @@ function _encolarBusquedaRemota(palabra) {
 }
 
 async function _procesarColaRemota() {
+  return; // <--- AGREGÁ ESTA LÍNEA ACÁ PARA APAGAR LA BÚSQUEDA EXTERNA
+
   if (_buscandoRemoto || _colaRemota.length === 0) return;
   _buscandoRemoto = true;
   const palabra = _colaRemota.shift();

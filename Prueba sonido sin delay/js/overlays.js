@@ -148,12 +148,72 @@ function dibujarAnillosEco(p, cx, cy, radioMax, ecoA, ecoB, ahora) {
  * Máscara del marco físico: pinta de negro todo lo exterior al círculo.
  * Se dibuja al FINAL de cada frame — nada se proyecta fuera del marco.
  */
+
 function dibujarMascaraCircular(p, cx, cy, radio) {
   const ctx = p.drawingContext;
   ctx.save();
   ctx.beginPath();
   ctx.rect(0, 0, p.width, p.height);
   ctx.arc(cx, cy, radio, 0, Math.PI * 2, true); // sentido inverso = agujero
+
+ // --- INICIO DEGRADÉ INTERIOR (COLORES PUROS) ---
+
+  if (typeof window.colorActual === 'undefined') {
+      window.colorActual = { r: 0, g: 0, b: 0 }; 
+  }
+
+  let tiempoSilencio = window.segundosSinVozGlobal || 0;
+  let estadoActual = window.estadoActualGlobal || 'SILENCIO';
+  let detectaAudio = window.estanHablandoGlobal || false;
+  
+  let target = { r: 0, g: 0, b: 0 }; 
+
+  // 1. REGLA DE VICTORIA
+  if (estadoActual === 'CONVERGENCIA') {
+      target = { r: 120, g: 40, b: 220 }; 
+  } 
+  // 2. REGLA DE AUDIO CON INERCIA: 
+  // Se pone violeta si detecta audio, O si el silencio lleva menos de 1.5 segundos.
+  // Esto cubre los micro-silencios entre palabras para que no se apague al hablar.
+  else if (detectaAudio || tiempoSilencio < 1.5) {
+      target = { r: 120, g: 40, b: 220 }; 
+  } 
+  // 3. REGLAS DE ALERTA:
+  // Si pasaron 3 segundos de silencio absoluto, te avisa en rojo.
+  else if (tiempoSilencio >= 3.0) {
+      target = { r: 255, g: 0, b: 0 }; 
+  } 
+  // 4. TRANSICIÓN A NEGRO:
+  // Si el silencio está entre 1.5 y 3.0 segundos, se va apagando a negro suavemente.
+  else {
+      target = { r: 0, g: 0, b: 0 }; 
+  }
+
+  let velocidad = 0.2; 
+
+  window.colorActual.r += (target.r - window.colorActual.r) * velocidad;
+  window.colorActual.g += (target.g - window.colorActual.g) * velocidad;
+  window.colorActual.b += (target.b - window.colorActual.b) * velocidad;
+
+  let r = Math.round(window.colorActual.r);
+  let g = Math.round(window.colorActual.g);
+  let b = Math.round(window.colorActual.b);
+
+  let centroDegX = ctx.canvas.width / 2;
+  let centroDegY = ctx.canvas.height / 2;
+  let radioDeg = Math.min(centroDegX, centroDegY);
+
+  let degrade = ctx.createRadialGradient(centroDegX, centroDegY, 0, centroDegX, centroDegY, radioDeg);
+
+  degrade.addColorStop(0, `rgba(${r}, ${g}, ${b}, 0.45)`); 
+  degrade.addColorStop(1, 'rgba(0, 0, 0, 0)');
+
+  ctx.fillStyle = degrade;
+  ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+
+  // --- FIN DEGRADÉ INTERIOR ---
+
+  // Máscara exterior original (esto tapa las esquinas con negro puro)
   ctx.fillStyle = '#000000';
   ctx.fill('evenodd');
   ctx.restore();

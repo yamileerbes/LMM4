@@ -24,6 +24,11 @@ const DWELL = {
   CONVERGENCIA: 3.0,
 };
 
+// Colores de feedback para el fondo
+const COLOR_FONDO_BIEN = 'rgba(34, 197, 94, 0.85)';  // Verde (sumando)
+const COLOR_FONDO_MAL  = 'rgba(239, 68, 68, 0.85)';   // Rojo (restando)
+const COLOR_FONDO_NEUTRO = 'rgba(0, 0, 0, 1.0)';      // Fondo base por defecto
+
 // Score mínimo para entrar a CONVERGENCIA desde CLOTOIDE
 const SCORE_ENTRADA_CONVERGENCIA = 1.0;
 
